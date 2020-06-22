@@ -1,0 +1,18 @@
+.productContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 400px;
+  border: 1px solid tomato;
+  border-radius: 10px;
+  padding: 10px;
+  flex-direction: column;
+}
+
+.title {
+  font-size: 30px;
+}
+
+.productImage {
+  width: 100%;
+}
