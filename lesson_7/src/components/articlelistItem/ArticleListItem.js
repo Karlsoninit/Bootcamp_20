@@ -1,10 +1,22 @@
 import React from "react";
 import { Link, withRouter } from "react-router-dom";
 
-const ArticlelistItem = ({ urlToImage, publishedAt, history, title }) => {
-  console.log("hostory", history);
+const ArticlelistItem = ({
+  urlToImage,
+  publishedAt,
+  history,
+  title,
+  qwery,
+}) => {
   return (
-    <li style={{ margin: 10, flexDirection: "column", display: "flex" }}>
+    <li
+      style={{
+        margin: 10,
+        flexDirection: "column",
+        display: "flex",
+        width: 400,
+      }}
+    >
       <img style={{ width: 400, height: 250 }} src={urlToImage} alt="news" />
       {/* <button
         onClick={() =>
@@ -21,7 +33,7 @@ const ArticlelistItem = ({ urlToImage, publishedAt, history, title }) => {
       <Link
         to={{
           pathname: `/${publishedAt}`,
-          search: "?category=adventure",
+          search: `?qwery=${qwery}`,
           hash: "#treasure-island",
           state: { from: "/dashboard" },
         }}
