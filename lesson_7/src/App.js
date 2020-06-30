@@ -1,10 +1,9 @@
 import React from "react";
-import { Switch, Route, Link } from "react-router-dom";
-import HomePage from "./pages/HomePage";
+import { useRouter } from "./router";
+
 // import CreatePage from "./pages/CreatePage";
 // import TodoPage from "./pages/TodoPage";
-import ArticlePage from "./pages/ArticlePage";
-import CommentsPage from "./pages/CommentsPage";
+
 // import TestHistory from "./components/TestHistory";
 // import Application from "./components/Application";
 // import Shop from "./components/Shop";
@@ -21,27 +20,9 @@ import CommentsPage from "./pages/CommentsPage";
 //   </ul>
 // );
 
-const url = "dksldfdfld/fd";
-
-function App(props) {
-  return (
-    <>
-      <Switch>
-        <Route
-          exact
-          path="/"
-          render={(props) => <HomePage url={url} {...props} />}
-        />
-
-        <Route path="/comments" component={CommentsPage} />
-        <Route path="/:id" component={ArticlePage} />
-      </Switch>
-      {/* <TestHistory>
-        <Application />
-        <Shop />
-      </TestHistory> */}
-    </>
-  );
+function App() {
+  const routing = useRouter("170f254648c146d1b4131a2ec576187a");
+  return <>{routing}</>;
 }
 
 export default App;

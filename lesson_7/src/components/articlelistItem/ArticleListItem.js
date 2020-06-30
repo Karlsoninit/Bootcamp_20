@@ -34,8 +34,8 @@ const ArticlelistItem = ({
         to={{
           pathname: `/${publishedAt}`,
           search: `?qwery=${qwery}`,
-          hash: "#treasure-island",
-          state: { from: "/dashboard" },
+          // hash: "#treasure-island",
+          // state: { from: "/dashboard" },
         }}
       >
         show more info about {title}

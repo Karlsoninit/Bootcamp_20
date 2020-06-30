@@ -1,8 +1,8 @@
 import axios from "axios";
 
-const changeSearchParams = (param) => (param ? param : "apple");
+const changeSearchParams = (param) => (param ? param : "babli");
 
-export const receivingNews = async (qwery) => {
+export const receivingNews = async (qwery, token) => {
   const content = changeSearchParams(qwery);
   try {
     const {

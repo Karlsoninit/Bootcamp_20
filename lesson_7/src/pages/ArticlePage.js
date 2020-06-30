@@ -1,26 +1,31 @@
 import React, { Component } from "react";
 import { receivingNews } from "../services";
 import queryString from "query-string";
-import { Route, Link } from "react-router-dom";
+import { Route, Link, withRouter } from "react-router-dom";
 import MoreInfo from "../components/MoreInfo";
 
 class ArticlePage extends Component {
   state = {
     article: null,
+    qwery: null,
   };
 
   componentDidMount() {
-    const { qwery } = queryString.parse(this.props.location.search);
+    if (this.props.match.params.id.length < 20) {
+      console.log("redirect");
+      this.props.history.push("/");
+    }
 
+    const { qwery } = queryString.parse(this.props.location.search);
+    this.setState({ qwery });
     if (qwery) {
       this.getCurrentArticle(qwery);
     }
   }
 
   getCurrentArticle = async (qwery) => {
-    console.log(this.props.match.params.id);
     const id = this.props.match.params.id;
-    console.log("id", id.length);
+
     if (!id.length < 20) {
       const articles = await receivingNews(qwery);
       const article = articles.find((article) => article.publishedAt === id);
@@ -29,7 +34,9 @@ class ArticlePage extends Component {
   };
 
   goToComments = () => {
-    this.props.history.push("/comments");
+    this.props.history.push("/comments", {
+      qwery: this.state.qwery,
+    });
   };
 
   render() {
@@ -46,9 +53,10 @@ class ArticlePage extends Component {
           alt="news"
         />
         <button onClick={this.goToComments}>comment this article</button>
-        <Link to={{ pathname: `/more/${this.props.match.params.id}` }}>
+
+        {/* <Link to={{ pathname: `/more/${this.props.match.params.id}` }}>
           more info about ...
-        </Link>
+        </Link> */}
         <Route path={`/more/:id`} component={MoreInfo} />
       </div>
     ) : (
@@ -57,4 +65,4 @@ class ArticlePage extends Component {
   }
 }
 
-export default ArticlePage;
+export default withRouter(ArticlePage);
