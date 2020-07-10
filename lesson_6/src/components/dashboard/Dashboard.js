@@ -26,7 +26,6 @@ class Dashboard extends Component {
     sortProductSize: [],
     isOpen: false,
     chooseSize: null,
-
     currentProducts: [],
   };
 

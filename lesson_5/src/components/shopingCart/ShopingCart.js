@@ -1,7 +1,12 @@
 import React from "react";
 import ProductList from "../productList/ProductList";
 
-const ShopingCart = ({ isOpen, onCartProduct, toogleCart }) => {
+const ShopingCart = ({
+  isOpen,
+  onCartProduct,
+  toogleCart,
+  onhandleBuyProducts,
+}) => {
   return (
     <>
       <div style={{ width: 100, height: 100 }} onClick={toogleCart}>
@@ -13,6 +18,7 @@ const ShopingCart = ({ isOpen, onCartProduct, toogleCart }) => {
       </div>
       {/* <button onClick={this.toogleCart}>open cart</button> */}
       {isOpen && <ProductList data={onCartProduct} />}
+      <button onClick={onhandleBuyProducts}>buy this t-shirt</button>
     </>
   );
 };

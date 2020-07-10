@@ -1,12 +1,23 @@
 import React, { Component } from "react";
-
+import axios from "axios";
 import ProductList from "../productList/ProductList";
 import ShopingCart from "../shopingCart/ShopingCart";
 import SelectSizeProduct from "../selectSizeProduct/SelectSizeProduct";
 import AddProduct from "../addProduct/AddProduct";
 
+//replenish to db
+const replenishProductDB = (products) => {
+  products.forEach((product) => {
+    axios.post("https://news-9cced.firebaseio.com/products.json", product);
+  });
+};
+
 const findProductById = (id, products) =>
   products.find((product) => product.id === id);
+
+const saveStorage = (storageName, state, product) => {
+  localStorage.setItem(storageName, JSON.stringify([...state, product]));
+};
 
 class Dashboard extends Component {
   state = {
@@ -14,7 +25,7 @@ class Dashboard extends Component {
     sortProductSize: [],
     isOpen: false,
     chooseSize: null,
-    flag: false,
+
     currentProducts: [],
   };
 
@@ -26,19 +37,19 @@ class Dashboard extends Component {
   //   return nextState.chooseSize !== this.state.chooseSize;
   // }
 
+  // static getDerivedStateFromProps(props, state) {
+  //   console.log("getDerivedStateFromProps");
+  //   return { currentProducts: props.products };
+  // }
+
   componentDidMount() {
     console.log("componentDidMount");
-    // if (localStorage.getItem("products")) {
-    //   this.setState({
-    //     flag: true,
-    //     currentProducts: JSON.parse(localStorage.getItem("products")),
-    //   });
-    // } else {
-    //   this.setState({
-    //     flag: true,
-    //     currentProducts: this.props.products,
-    //   });
-    // }
+
+    if (localStorage.getItem("onlineBasket")) {
+      this.setState({
+        cartProduct: JSON.parse(localStorage.getItem("onlineBasket")),
+      });
+    }
 
     this.setState({
       flag: true,
@@ -48,8 +59,23 @@ class Dashboard extends Component {
     });
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    console.log("componentDidUpdate");
+    console.log("prevState", prevState);
+    console.log("this.state", this.state);
+    if (prevState.chooseSize !== this.state.chooseSize) {
+      console.log("---- start filter ----");
+      const sortBySIzeProducts = this.state.currentProducts.filter((product) =>
+        product.availableSizes.includes(this.state.chooseSize)
+      );
+      this.setState({ sortProductSize: sortBySIzeProducts });
+    }
+  }
+
   addToCart = (id) => {
-    console.log();
+    console.log(
+      this.state.cartProduct.reduce((acc, product) => (acc += product.price), 0)
+    );
     const chooseProduct = {
       ...findProductById(id, this.state.currentProducts),
       chooseCart: true,
@@ -58,15 +84,12 @@ class Dashboard extends Component {
     this.setState((prev) => {
       return { cartProduct: [...prev.cartProduct, chooseProduct] };
     });
+
+    saveStorage("onlineBasket", this.state.cartProduct, chooseProduct);
   };
 
   sortBySize = ({ value }) => {
-    console.log("size", value);
     this.setState({ chooseSize: value });
-    const sortBySIzeProducts = this.state.currentProducts.filter((product) =>
-      product.availableSizes.includes(value)
-    );
-    this.setState({ sortProductSize: sortBySIzeProducts });
   };
 
   showAllProrducts = () => {
@@ -79,17 +102,20 @@ class Dashboard extends Component {
 
   updateProduct = (product) => {
     this.setState((prev) => {
-      localStorage.setItem(
-        "products",
-        JSON.stringify([...prev.currentProducts, product])
-      );
       return {
         currentProducts: [...prev.currentProducts, product],
       };
     });
+    saveStorage("products", this.state.currentProducts, product);
+  };
+
+  buyProducts = () => {
+    localStorage.removeItem("onlineBasket");
+    this.setState({ cartProduct: [] });
   };
 
   render() {
+    console.log("render");
     const {
       cartProduct,
       sortProductSize,
@@ -97,14 +123,12 @@ class Dashboard extends Component {
       flag,
       currentProducts,
     } = this.state;
-    console.log("render dashboard");
-    console.log("show flag", flag);
-    console.log("this.state.currentProducts", this.state.currentProducts);
-    console.log("------------");
+
     return (
       <>
         <AddProduct onUpdateProduct={this.updateProduct} />
         <ShopingCart
+          onhandleBuyProducts={this.buyProducts}
           onCartProduct={cartProduct}
           isOpen={isOpen}
           toogleCart={this.toogleCart}

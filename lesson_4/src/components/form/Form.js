@@ -3,13 +3,17 @@ import shortID from "shortid";
 import Input from "../input/Input";
 import config from "../../inputConfig";
 import CustomSelect from "../customSelect/CustomSelect";
-console.log("config", config);
+// console.log("config", config);
 
 // console.log(Object.keys(config).map((name) => ({ [name]: "" })));
 
+const transform = Object.assign(
+  {},
+  ...Object.keys(config).map((elem) => ({ [elem]: {} }))
+);
+
 const initialState = {
-  [config.wish.name]: "",
-  [config.description.name]: "",
+  ...transform,
   priority: null,
 };
 
@@ -38,8 +42,6 @@ class Form extends Component {
   };
 
   render() {
-    console.log("re-render");
-
     return (
       <form onSubmit={this.handleSubmit}>
         <Input

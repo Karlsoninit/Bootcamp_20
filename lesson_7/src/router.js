@@ -1,29 +1,47 @@
 import React from "react";
-
-import { Switch, Route, Link, Redirect } from "react-router-dom";
-import HomePage from "./pages/HomePage";
-import ArticlePage from "./pages/ArticlePage";
-import CommentsPage from "./pages/CommentsPage";
+import { Switch, Route, Redirect } from "react-router-dom";
+import Loadable from "react-loadable";
 import AuthPage from "./pages/auth/AuthPage";
+
+const Loading = () => {
+  return <h2>Loading ...</h2>;
+};
+
+const LoadableHomePage = Loadable({
+  loader: () => import("./pages/HomePage" /* webpackChunkName: "HomePage" */),
+  loading: Loading,
+});
+
+const LoadableCommentsPage = Loadable({
+  loader: () =>
+    import("./pages/CommentsPage" /* webpackChunkName: "CommentsPage" */),
+  loading: Loading,
+});
+
+const LoadableArticlePage = Loadable({
+  loader: () =>
+    import("./pages/ArticlePage" /* webpackChunkName: "ArticlePage" */),
+  loading: Loading,
+});
 
 const routing = [
   {
     path: "/",
     label: "Home",
     exact: true,
-    component: <HomePage />,
+    component: <LoadableHomePage />,
   },
   {
     path: "/comments",
     label: "Comments",
     exact: false,
-    component: <CommentsPage />,
+    component: <LoadableCommentsPage />,
   },
   {
     path: "/:id",
     label: "ArticlePage",
     exact: false,
-    component: <ArticlePage />,
+    component: <LoadableArticlePage />,
   },
 ];
 
@@ -51,14 +69,3 @@ export const useRouter = (isAuth) => {
     </Switch>
   );
 };
-
-// <Route exact path="/">
-// <HomePage token={isAuth} />
-// </Route>
-// <Route path="/comments">
-// <CommentsPage />
-// </Route>
-// <Route
-// path="/:id"
-// render={(props) => <ArticlePage {...props} token={isAuth} />}
-// />

@@ -1,15 +1,30 @@
 import React from "react";
 import SimpleCard from "../../ui/simpleCard/SimpleCard";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
+import styles from "./todo.module.css";
+
+const moveAnimate = {
+  enter: styles.moveEnter,
+  enterActive: styles.moveEnterActive,
+  exit: styles.moveExit,
+  exitActive: styles.moveExitActive,
+  enterDone: styles.moveEnterDone,
+};
 
 const Todos = ({ todos, deleteTask }) => {
   return (
-    <ul style={{ display: "flex", flexWrap: "wrap" }}>
+    <TransitionGroup
+      component="ul"
+      style={{ display: "flex", flexWrap: "wrap" }}
+    >
       {todos.map((task) => (
-        <li key={task.id}>
-          <SimpleCard deleteTask={deleteTask} {...task} />
-        </li>
+        <CSSTransition key={task.id} timeout={2000} classNames={moveAnimate}>
+          <li>
+            <SimpleCard deleteTask={deleteTask} {...task} />
+          </li>
+        </CSSTransition>
       ))}
-    </ul>
+    </TransitionGroup>
   );
 };
 
