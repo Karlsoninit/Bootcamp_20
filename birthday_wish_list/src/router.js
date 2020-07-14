@@ -1,16 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
-import { useSelector } from "react-redux";
-
+import { useSelector, useDispatch } from "react-redux";
+import db from "./db/config";
 import Auth from "./pages/auth/Auth";
 import Dashboard from "./pages/main/Dashboard";
-// import BirthdayBoyWishes from "./pages/main/BirthdayBoyWishes";
-// import CreateBirthdayBoyWish from "./pages/main/CreateBirthdayBoyWish";
-// import WishDescription from "./pages/main/WishDescription";
+import authReducer from "./redux/auth/authReducer";
+const { actions } = authReducer;
+const { loginSuccessful } = actions;
 
 export const useRouter = () => {
-  const { uid } = useSelector((state) => state.session.user);
-  if (!uid) {
+  const [user, setUser] = useState(null);
+  const dispatch = useDispatch();
+  // change user
+  db.auth.onAuthStateChanged((user) => {
+    console.log("user change", user);
+    if (user) {
+      dispatch(loginSuccessful(user));
+    }
+    setUser(user);
+  });
+
+  // const { uid } = useSelector((state) => state.session.user);
+  if (!user) {
     return (
       <Switch>
         <Route path="/auth">

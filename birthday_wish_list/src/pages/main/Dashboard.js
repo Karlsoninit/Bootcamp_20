@@ -1,9 +1,8 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import {
-  userSignOut,
-  AuthStateChanged,
-} from "../../redux/auth/authOpearations";
+import { userSignOut } from "../../redux/auth/authOpearations";
+import { Route, Link } from "react-router-dom";
+import CreateBirthdayBoyWish from "./CreateBirthdayBoyWish";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -13,11 +12,14 @@ const Dashboard = () => {
       <button
         onClick={() => {
           dispatch(userSignOut());
-          dispatch(AuthStateChanged());
         }}
       >
         logout
       </button>
+      <Link to="/dashboard/createWish">create</Link>
+      <Route path="/dashboard/createWish">
+        <CreateBirthdayBoyWish />
+      </Route>
     </>
   );
 };

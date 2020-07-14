@@ -17,4 +17,5 @@ firebase.initializeApp(firebaseConfig);
 
 export default {
   auth: firebase.auth(),
+  firestore: firebase.firestore(),
 };

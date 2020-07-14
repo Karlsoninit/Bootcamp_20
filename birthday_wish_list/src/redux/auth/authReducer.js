@@ -6,6 +6,7 @@ const initialState = {
     nickName: null,
     uid: null,
   },
+  isLogin: false,
 };
 
 export default createSlice({
@@ -20,5 +21,15 @@ export default createSlice({
         nickName: payload.displayName,
       },
     }),
+    loginSuccessful: (state, { payload }) => ({
+      ...state,
+      user: {
+        email: payload.email,
+        uid: payload.uid,
+        nickName: payload.displayName,
+      },
+      isLogin: true,
+    }),
+    signOut: () => initialState,
   },
 });
