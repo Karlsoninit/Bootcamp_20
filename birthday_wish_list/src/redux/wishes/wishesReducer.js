@@ -1,9 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  status: "",
+  collectionId: null,
   data: [],
   wishCount: 0,
+  friendsWish: {
+    name: "",
+    list: [],
+  },
 };
 
 export default createSlice({
@@ -13,6 +17,21 @@ export default createSlice({
     createWish: (state) => ({
       ...state,
       wishCount: state.wishCount + 1,
+    }),
+    userCollectionId: (state, { payload }) => ({
+      ...state,
+      collectionId: payload,
+    }),
+    updateAllWishesCollection: (state, { payload }) => ({
+      ...state,
+      data: payload,
+    }),
+    uploadFriendsWishes: (state, { payload }) => ({
+      ...state,
+      friendsWish: {
+        name: payload.name,
+        list: payload.list,
+      },
     }),
   },
 });

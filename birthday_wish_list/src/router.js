@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import db from "./db/config";
 import Auth from "./pages/auth/Auth";
 import Dashboard from "./pages/main/Dashboard";
@@ -11,16 +11,15 @@ const { loginSuccessful } = actions;
 export const useRouter = () => {
   const [user, setUser] = useState(null);
   const dispatch = useDispatch();
-  // change user
+  // check user
   db.auth.onAuthStateChanged((user) => {
-    console.log("user change", user);
     if (user) {
+      console.log("<-- check user -->", user);
       dispatch(loginSuccessful(user));
     }
     setUser(user);
   });
 
-  // const { uid } = useSelector((state) => state.session.user);
   if (!user) {
     return (
       <Switch>

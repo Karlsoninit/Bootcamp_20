@@ -12,7 +12,6 @@ export const userSignIn = ({ email, password, nickName }) => async (
   try {
     await db.auth.createUserWithEmailAndPassword(email, password);
     const user = await db.auth.currentUser;
-    console.log("current user", user);
     await user.updateProfile({
       displayName: nickName,
     });
